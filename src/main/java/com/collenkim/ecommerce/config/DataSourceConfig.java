@@ -1,21 +1,17 @@
 package com.collenkim.ecommerce.config;
 
 import com.zaxxer.hikari.HikariDataSource;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import java.util.Properties;
 import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 @EnableJpaRepositories(basePackages = {
-    "com.collenkim.ecommerce.customer.repository",
+    "com.collenkim.ecommerce.member.repository",
     "com.collenkim.ecommerce.payment.repository",
     "com.collenkim.ecommerce.product.repository",
     "com.collenkim.ecommerce.order.repository"
@@ -62,16 +58,6 @@ public class DataSourceConfig {
         properties.setProperty("hibernate.show_sql", "true");  // SQL 로그 출력
         properties.setProperty("hibernate.format_sql", "true");  // SQL 포맷팅
         return properties;
-    }
-
-    @Bean
-    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
-        return new JpaTransactionManager(emf);
-    }
-
-    @Bean
-    public EntityManager entityManager(EntityManagerFactory emf) {
-        return emf.createEntityManager();
     }
 
 }
