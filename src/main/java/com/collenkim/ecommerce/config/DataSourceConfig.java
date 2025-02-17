@@ -40,7 +40,8 @@ public class DataSourceConfig {
             "com.collenkim.ecommerce.customer.domain",
             "com.collenkim.ecommerce.payment.domain",
             "com.collenkim.ecommerce.product.domain",
-            "com.collenkim.ecommerce.order.domain");
+            "com.collenkim.ecommerce.order.domain",
+            "com.collenkim.ecommerce.member.domain");
 
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setGenerateDdl(false);  // 스키마 자동 생성
@@ -53,7 +54,7 @@ public class DataSourceConfig {
     private Properties jpaProperties() {
 
         Properties properties = new Properties();
-        properties.setProperty("hibernate.hbm2ddl", "update");  // 테이블 자동 업데이트
+        properties.setProperty("hibernate.hbm2ddl.auto", "create");  // 테이블 자동 업데이트
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
         properties.setProperty("hibernate.show_sql", "true");  // SQL 로그 출력
         properties.setProperty("hibernate.format_sql", "true");  // SQL 포맷팅

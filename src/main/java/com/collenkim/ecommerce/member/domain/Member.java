@@ -1,5 +1,6 @@
 package com.collenkim.ecommerce.member.domain;
 
+import com.collenkim.ecommerce.cd.Yn;
 import com.collenkim.ecommerce.common.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,7 +10,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
@@ -41,12 +41,28 @@ public class Member extends BaseEntity {
     @Column(name = "phone", nullable = false)
     private String phone;
 
-    @Builder
-    public Member(String userId, String password, String name, String phone) {
+    @Column(name = "use_yn", nullable = false)
+    private String useYn;
+
+    private Member(String userId, String password, String name, String phone, String useYn) {
         this.userId = userId;
         this.password = password;
         this.name = name;
         this.phone = phone;
+        this.useYn = useYn;
+    }
+
+    /**
+     * 회원 생성
+     *
+     * @param userId
+     * @param password
+     * @param name
+     * @param phone
+     * @return
+     */
+    public static Member createMember(String userId, String password, String name, String phone) {
+        return new Member(userId, password, name, phone, Yn.Y.getCode());
     }
 
     public void updatePhone(String phone) {
@@ -55,6 +71,10 @@ public class Member extends BaseEntity {
 
     public void updatePassword(String password) {
         this.password = password;
+    }
+
+    public void updateUseYn(String useYn) {
+        this.useYn = useYn;
     }
 
 }

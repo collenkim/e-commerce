@@ -3,13 +3,15 @@ package com.collenkim.ecommerce.member.domain;
 import com.collenkim.ecommerce.common.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,22 +29,45 @@ public class Address extends BaseEntity {
     @Column(name = "address_id")
     private Long addressId;
 
-    @Column(name = "member_id")
-    private Long memberId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
+    @Column(name = "is_default")
     private Boolean isDefault; //기본배송지 여부
+
+    @Column(name = "zip_code")
     private String zipCode;  //우편번호
+
+    @Column(name = "basic_address")
     private String basicAddress; //기본주소
+
+    @Column(name = "detail_address")
     private String detailAddress; //상세주소
 
-    @Builder
-    public Address(Long memberId, Boolean isDefault, String zipCode, String basicAddress,
+    private Address(Member member, Boolean isDefault, String zipCode, String basicAddress,
         String detailAddress) {
-        this.memberId = memberId;
+        this.member = member;
         this.isDefault = isDefault;
         this.zipCode = zipCode;
         this.basicAddress = basicAddress;
         this.detailAddress = detailAddress;
+    }
+
+    /**
+     * 주소 생성
+     *
+     * @param member
+     * @param isDefault
+     * @param zipCode
+     * @param basicAddress
+     * @param detailAddress
+     * @return
+     */
+    public static Address createAddress(Member member, Boolean isDefault, String zipCode,
+        String basicAddress,
+        String detailAddress) {
+        return new Address(member, isDefault, zipCode, basicAddress, detailAddress);
     }
 
 }

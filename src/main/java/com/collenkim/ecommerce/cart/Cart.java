@@ -5,6 +5,7 @@ import com.collenkim.ecommerce.common.domain.BaseEntity;
 import com.collenkim.ecommerce.member.domain.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,6 +15,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -25,7 +27,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity
 @Table(name = "cart",
     indexes = {
-
+        @Index(name = "idx_member_id", columnList = "member_id"),
         @Index(name = "idx_status", columnList = "status")
     })
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -36,8 +38,8 @@ public class Cart extends BaseEntity {
     @Column(name = "cart_id")
     private Long cartId;
 
-    @OneToOne
-    @JoinColumn(name = "member_id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false, unique = true)
     private Member member;
 
     @Column(name = "status", nullable = false)
@@ -46,9 +48,8 @@ public class Cart extends BaseEntity {
     @Column(name = "total_price")
     private BigDecimal totalPrice;
 
-    @OneToMany
-    @JoinColumn(name = "cart_id")
-    private List<CartItem> cartItemList;
+    @OneToMany(mappedBy = "cart")
+    private List<CartItem> items = new ArrayList<>();
 
     private Cart(Member member, String status) {
         this.member = member;
