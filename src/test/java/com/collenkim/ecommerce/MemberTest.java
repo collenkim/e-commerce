@@ -2,7 +2,8 @@ package com.collenkim.ecommerce;
 
 import com.collenkim.ecommerce.cd.Yn;
 import com.collenkim.ecommerce.member.domain.Member;
-import com.collenkim.ecommerce.member.repository.MemberRepository;
+import com.collenkim.ecommerce.member.dto.MemberDto;
+import com.collenkim.ecommerce.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,17 +13,21 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class MemberTest {
 
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberService memberService;
 
     @DisplayName("회원가입 테스트")
     @Test
     public void insertMember() {
 
-        Member member = Member.createMember("collenkim", "1234", "김콜린", "01012345678");
+        MemberDto.ReqAdd reeAdd = new MemberDto.ReqAdd();
+        reeAdd.setUserId("collenkim");
+        reeAdd.setName("김콜린");
+        reeAdd.setPassword("1234");
+        reeAdd.setPhone("01012345678");
 
-        memberRepository.save(member);
+        memberService.insertMember(reeAdd);
 
-        Member findMember = memberRepository.findByUserId("collenkim");
+        Member findMember = memberService.getMemberByUserId("collenkim");
 
         System.out.println(
             "memberId : " + findMember.getMemberId() + " password : " + findMember.getPassword()
@@ -36,15 +41,17 @@ public class MemberTest {
     @Test
     public void deleteMember() {
 
-        Member member = Member.createMember("collenkim", "1234", "김콜린", "01012345678");
+        MemberDto.ReqAdd reeAdd = new MemberDto.ReqAdd();
+        reeAdd.setUserId("collenkim");
+        reeAdd.setName("김콜린");
+        reeAdd.setPassword("1234");
+        reeAdd.setPhone("01012345678");
 
-        memberRepository.save(member);
+        memberService.insertMember(reeAdd);
 
-        member.updateUseYn(Yn.N.getCode());
+        memberService.updateMemberUseYn("collenkim", Yn.N.getCode());
 
-        memberRepository.save(member);
-
-        Member findMember = memberRepository.findByUserId("collenkim");
+        Member findMember = memberService.getMemberByUserId("collenkim");
 
         System.out.println(
             "memberId : " + findMember.getMemberId() + " password : " + findMember.getPassword()

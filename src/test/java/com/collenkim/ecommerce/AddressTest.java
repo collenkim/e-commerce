@@ -2,9 +2,12 @@ package com.collenkim.ecommerce;
 
 import com.collenkim.ecommerce.member.domain.Address;
 import com.collenkim.ecommerce.member.domain.Member;
-import com.collenkim.ecommerce.member.repository.AddressRepository;
-import com.collenkim.ecommerce.member.repository.MemberRepository;
+import com.collenkim.ecommerce.member.dto.AddressDto;
+import com.collenkim.ecommerce.member.dto.MemberDto;
+import com.collenkim.ecommerce.member.service.AddressService;
+import com.collenkim.ecommerce.member.service.MemberService;
 import java.util.List;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,44 +19,112 @@ import org.springframework.transaction.annotation.Transactional;
 public class AddressTest {
 
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberService memberService;
 
     @Autowired
-    private AddressRepository addressRepository;
+    private AddressService addressService;
 
     @BeforeEach
     public void init() {
 
         //회원 등록
-        Member member = Member.createMember("collenkim", "1234", "김콜린", "01012345678");
+        MemberDto.ReqAdd reeAdd = new MemberDto.ReqAdd();
+        reeAdd.setUserId("collenkim");
+        reeAdd.setName("김콜린");
+        reeAdd.setPassword("1234");
+        reeAdd.setPhone("01012345678");
 
-        memberRepository.save(member);
+        memberService.insertMember(reeAdd);
 
     }
 
-    @DisplayName("주소 등록 테스트")
+    @DisplayName("주소 조회 테스트")
     @Test
     @Transactional
-    public void insertAddress() {
+    public void select_member_address() {
 
-        Member findMember = memberRepository.findByUserId("collenkim");
+        //Given 주소 등록
+        AddressDto.ReqAdd reqAdd = new AddressDto.ReqAdd();
+        reqAdd.setMemberId(1L);
+        reqAdd.setIsDefault(true);
+        reqAdd.setZipCode("405-21");
+        reqAdd.setBasicAddress("경기도 성남시 분당구 정자동 178-1");
+        reqAdd.setDetailAddress("301동 101호");
 
-        Address address = Address.createAddress(findMember, true, "405-21", "경기도 성남시 분당구 정자동 178-1",
-            "301동 101호");
+        addressService.insertAddress(reqAdd);
 
-        addressRepository.save(address);
+        //When 주소 조회
+        List<Address> addressList = addressService.getAddressList(1L);
 
-        List<Address> addressList = addressRepository.findByMember(findMember);
+        //Then 주소 조회 확인
+        for (Address address : addressList) {
 
-        Address findAddress = addressList.stream().filter(e -> e.getIsDefault() == true).findFirst()
-            .get();
+            Member member = address.getMember();
 
-        Member subMember = findAddress.getMember();
+            System.out.println(
+                "addressId : " + address.getAddressId() + " userId : " + member.getUserId()
+                    + " isDefault : " + address.getIsDefault()
+                    + " zipCode : " + address.getZipCode()
+                    + " basicAddress : " + address.getBasicAddress()
+                    + " detailAddress : " + address.getDetailAddress()
+            );
+        }
 
-        System.out.println(
-            "addressId : " + findAddress.getAddressId() + " userId : " + subMember.getUserId()
-                + " isDefault : " + findAddress.getIsDefault()
-                + " zipCode : " + findAddress.getZipCode());
+    }
+
+    @DisplayName("주소 삭제 테스트")
+    @Test
+    public void delete_address() {
+
+        //Given 주소 등록
+        AddressDto.ReqAdd reqAdd = new AddressDto.ReqAdd();
+        reqAdd.setMemberId(1L);
+        reqAdd.setIsDefault(true);
+        reqAdd.setZipCode("405-21");
+        reqAdd.setBasicAddress("경기도 성남시 분당구 정자동 178-1");
+        reqAdd.setDetailAddress("301동 101호");
+
+        addressService.insertAddress(reqAdd);
+
+        //Given 주소 삭제
+        addressService.deleteAddressByAddressId(1L);
+
+        //Then 주소 조회
+        List<Address> addressList = addressService.getAddressList(1L);
+
+        if (addressList == null || addressList.isEmpty()) {
+            Assertions.assertTrue(true);
+        } else {
+            Assertions.fail("주소 삭제 실패");
+        }
+
+    }
+
+    @DisplayName("주소 삭제 테스트")
+    @Test
+    public void delete_member_address() {
+
+        //Given 주소 등록
+        AddressDto.ReqAdd reqAdd = new AddressDto.ReqAdd();
+        reqAdd.setMemberId(1L);
+        reqAdd.setIsDefault(true);
+        reqAdd.setZipCode("405-21");
+        reqAdd.setBasicAddress("경기도 성남시 분당구 정자동 178-1");
+        reqAdd.setDetailAddress("301동 101호");
+
+        addressService.insertAddress(reqAdd);
+
+        //Given 주소 삭제
+        addressService.deleteAllAddressByMemberId(1L);
+
+        //Then 주소 조회
+        List<Address> addressList = addressService.getAddressList(1L);
+
+        if (addressList == null || addressList.isEmpty()) {
+            Assertions.assertTrue(true);
+        } else {
+            Assertions.fail("주소 삭제 실패");
+        }
 
     }
 

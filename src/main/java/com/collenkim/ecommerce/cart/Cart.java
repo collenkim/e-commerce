@@ -56,6 +56,12 @@ public class Cart extends BaseEntity {
         this.status = status;
     }
 
+    /**
+     * 장바구니 생성 (담기 버튼 클릭 시 혹은 회원 가입 시)
+     *
+     * @param member
+     * @return
+     */
     public static Cart createCart(Member member) {
         return new Cart(member, CartStatus.CREATED.name());
     }

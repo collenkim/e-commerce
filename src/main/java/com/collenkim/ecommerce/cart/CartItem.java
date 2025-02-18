@@ -11,10 +11,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
@@ -38,17 +36,29 @@ public class CartItem extends BaseEntity {
     @JoinColumn(name = "cart_id", nullable = false)
     private Cart cart;
 
-    @OneToOne(mappedBy = "product")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     @Column(name = "quantity", nullable = false)
     private int quantity;
 
-    @Builder
-    public CartItem(Cart cart, Product product, int quantity) {
+    private CartItem(Cart cart, Product product, int quantity) {
         this.cart = cart;
         this.product = product;
         this.quantity = quantity;
+    }
+
+    /**
+     * 장바구니 상품 생성
+     *
+     * @param cart
+     * @param product
+     * @param quantity
+     * @return
+     */
+    public static CartItem createCartItem(Cart cart, Product product, int quantity) {
+        return new CartItem(cart, product, quantity);
     }
 
     public void updateQuantity(int quantity) {

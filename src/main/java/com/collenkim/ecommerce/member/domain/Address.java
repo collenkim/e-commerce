@@ -70,4 +70,20 @@ public class Address extends BaseEntity {
         return new Address(member, isDefault, zipCode, basicAddress, detailAddress);
     }
 
+    public void updateIsDefault(Boolean isDefault) {
+        this.isDefault = isDefault;
+    }
+
+    public void updateZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public void updateBasicAddress(String basicAddress) {
+        this.basicAddress = basicAddress;
+    }
+
+    public void updateDetailAddress(String detailAddress) {
+        this.detailAddress = detailAddress;
+    }
+
 }

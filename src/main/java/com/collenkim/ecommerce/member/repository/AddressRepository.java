@@ -9,4 +9,8 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
 
     List<Address> findByMember(Member member);
 
+    void deleteByAddressId(Long addressId);
+
+    void deleteByMember(Member member);
+
 }
