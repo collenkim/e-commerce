@@ -23,12 +23,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
-
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    
     compileOnly("org.projectlombok:lombok:1.18.36")
     annotationProcessor("org.projectlombok:lombok:1.18.36")
-
-    //testCompileOnly("org.projectlombok:lombok:1.18.36")
-    //testAnnotationProcessor("org.projectlombok:lombok:1.18.36")
 
     runtimeOnly("com.h2database:h2")
 

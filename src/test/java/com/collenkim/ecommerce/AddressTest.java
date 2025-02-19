@@ -36,14 +36,6 @@ public class AddressTest {
 
         memberService.insertMember(reeAdd);
 
-    }
-
-    @DisplayName("주소 조회 테스트")
-    @Test
-    @Transactional
-    public void select_member_address() {
-
-        //Given 주소 등록
         AddressDto.ReqAdd reqAdd = new AddressDto.ReqAdd();
         reqAdd.setMemberId(1L);
         reqAdd.setIsDefault(true);
@@ -52,6 +44,15 @@ public class AddressTest {
         reqAdd.setDetailAddress("301동 101호");
 
         addressService.insertAddress(reqAdd);
+
+    }
+
+    @DisplayName("주소 조회 테스트")
+    @Test
+    @Transactional
+    public void select_member_address() {
+
+        //Given 주소 등록
 
         //When 주소 조회
         List<Address> addressList = addressService.getAddressList(1L);

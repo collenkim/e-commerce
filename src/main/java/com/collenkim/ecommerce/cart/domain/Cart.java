@@ -1,4 +1,4 @@
-package com.collenkim.ecommerce.cart;
+package com.collenkim.ecommerce.cart.domain;
 
 import com.collenkim.ecommerce.cd.CartStatus;
 import com.collenkim.ecommerce.common.domain.BaseEntity;
@@ -49,7 +49,7 @@ public class Cart extends BaseEntity {
     private BigDecimal totalPrice;
 
     @OneToMany(mappedBy = "cart")
-    private List<CartItem> items = new ArrayList<>();
+    private List<CartItem> cartItems = new ArrayList<>();
 
     private Cart(Member member, String status) {
         this.member = member;
