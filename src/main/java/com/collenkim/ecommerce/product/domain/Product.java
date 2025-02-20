@@ -2,9 +2,12 @@ package com.collenkim.ecommerce.product.domain;
 
 import com.collenkim.ecommerce.brand.domain.Brand;
 import com.collenkim.ecommerce.category.domain.Category;
+import com.collenkim.ecommerce.cd.ProductStatusCd;
 import com.collenkim.ecommerce.common.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,7 +17,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.math.BigDecimal;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,6 +43,10 @@ public class Product extends BaseEntity {
     @Column(name = "product_code", nullable = false)
     private String productCode;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brand_id", nullable = false)
     private Brand brand;
@@ -48,39 +54,31 @@ public class Product extends BaseEntity {
     @Column(name = "product_name", nullable = false)
     private String productName;
 
+    @Column(name = "product_status_cd", nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private ProductStatusCd productStatusCd;
+
     @Column(name = "thumbnail_url", nullable = false)
     private String thumbnailUrl;
 
     @Column(name = "content_image_url", nullable = false)
     private String contentImageUrl;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
-
-    @Column(name = "product_price", nullable = false, precision = 10, scale = 0)
-    private BigDecimal productPrice;
-
-    @Column(name = "product_stock", nullable = false)
-    private Integer productStock;
-
     @Column(name = "description")
     private String description;
 
-    private Product(String sellerId, String productCode, Brand brand, String productName,
-        String thumbnailUrl, String contentImageUrl, Category category, BigDecimal productPrice,
-        Integer productStock,
-        String description) {
+    private Product(String sellerId, String productCode, Category category, Brand brand,
+        String productName, ProductStatusCd productStatusCd, String thumbnailUrl,
+        String contentImageUrl, String description) {
         this.sellerId = sellerId;
         this.productCode = productCode;
+        this.category = category;
         this.brand = brand;
         this.productName = productName;
+        this.productStatusCd = productStatusCd;
         this.thumbnailUrl = thumbnailUrl;
         this.contentImageUrl = contentImageUrl;
-        this.productPrice = productPrice;
-        this.productStock = productStock;
         this.description = description;
-        this.category = category;
     }
 
     /**
@@ -90,21 +88,19 @@ public class Product extends BaseEntity {
      * @param productCode
      * @param brand
      * @param productName
+     * @param productStatusCd
      * @param thumbnailUrl
      * @param contentImageUrl
      * @param category
-     * @param productPrice
-     * @param productStock
      * @param description
      * @return
      */
-    public static Product createProduct(String sellerId, String productCode, Brand brand,
-        String productName,
-        String thumbnailUrl, String contentImageUrl, Category category, BigDecimal productPrice,
-        Integer productStock,
-        String description) {
-        return new Product(sellerId, productCode, brand, productName, thumbnailUrl, contentImageUrl,
-            category, productPrice, productStock, description);
+    public static Product createProduct(String sellerId, String productCode, Category category,
+        Brand brand,
+        String productName, ProductStatusCd productStatusCd, String thumbnailUrl,
+        String contentImageUrl, String description) {
+        return new Product(sellerId, productCode, category, brand, productName, productStatusCd,
+            thumbnailUrl, contentImageUrl, description);
     }
 
 }

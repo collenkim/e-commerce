@@ -1,4 +1,4 @@
-package com.collenkim.ecommerce.seller.domain;
+package com.collenkim.ecommerce.product.domain;
 
 import com.collenkim.ecommerce.common.domain.BaseEntity;
 import jakarta.persistence.Column;
@@ -14,18 +14,23 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "seller",
+@Table(name = "product_stock",
     indexes = {
         @Index(name = "idx_seller_id", columnList = "seller_id"),
         @Index(name = "idx_product_code", columnList = "product_code"),
         @Index(name = "idx_category_id", columnList = "category_id")
     })
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Seller extends BaseEntity {
+public class ProductStock extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "seller_id")
-    private Long sellerId;
+    @Column(name = "product_stock_id")
+    private Long productStockId;
+
+
+    @Column(name = "product_stock", nullable = false)
+    private Integer productStock;
+
 
 }
