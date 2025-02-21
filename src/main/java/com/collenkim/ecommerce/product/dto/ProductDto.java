@@ -44,13 +44,12 @@ public class ProductDto {
 
         @NotBlank(message = "상품 재고는 필수입니다.")
         private Integer productStock;
-        
+
         private String description;
 
         public Product toEntity(ProductStatusCd productStatusCd, Brand brand, Category category) {
-            return Product.createProduct(sellerId, productCode, brand, productName, productStatusCd,
-                thumbnailUrl,
-                contentImageUrl, category, productPrice, productStock, description);
+            return Product.createProduct(sellerId, productCode, category, brand, productName,
+                productStatusCd, thumbnailUrl, contentImageUrl, description);
         }
     }
 

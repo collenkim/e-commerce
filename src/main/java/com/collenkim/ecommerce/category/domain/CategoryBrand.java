@@ -12,6 +12,7 @@ import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,11 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "category_brand",
     indexes = {
-        @Index(name = "idx_cateogry_id", columnList = "cateogry_id")
+        @Index(name = "idx_category_id", columnList = "category_id"),
+        @Index(name = "idx_brand_id", columnList = "brand_id")
+    },
+    uniqueConstraints = {
+        @UniqueConstraint(name = "uq_category_brand", columnNames = {"category_id", "brand_id"})
     })
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CategoryBrand extends BaseEntity {
@@ -31,7 +36,7 @@ public class CategoryBrand extends BaseEntity {
     private Long categoryBrandId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cateogry_id", nullable = false)
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)

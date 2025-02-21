@@ -9,8 +9,9 @@ public enum OptionTypeCd {
 
     SIZE("SIZE", "사이즈"),
     COLOR("COLOR", "색상"),
+    CAPACITY("CAPACITY", "용량"),
     ;
-
+    
     private final String cd;
     private final String name;
 }

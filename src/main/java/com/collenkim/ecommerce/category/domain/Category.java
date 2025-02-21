@@ -41,15 +41,19 @@ public class Category extends BaseEntity {
     @Column(name = "level", nullable = false)
     private Integer level;
 
+    @Column(name = "depth", nullable = false)
+    private String depth;
+
     @OneToMany(mappedBy = "category")
     private List<CategoryBrand> categoryBrands = new ArrayList<>();
 
     private Category(Long parentId, String categoryName, String categoryIcon,
-        Integer level) {
+        Integer level, String depth) {
         this.parentId = parentId;
         this.categoryName = categoryName;
         this.categoryIcon = categoryIcon;
         this.level = level;
+        this.depth = depth;
     }
 
     /**
@@ -62,10 +66,8 @@ public class Category extends BaseEntity {
      * @return
      */
     public static Category createCategory(Long parentId, String categoryName,
-        String categoryIcon,
-        Integer level) {
-        return new Category(parentId, categoryName, categoryIcon,
-            level);
+        String categoryIcon, Integer level, String depth) {
+        return new Category(parentId, categoryName, categoryIcon, level, depth);
     }
 
 }

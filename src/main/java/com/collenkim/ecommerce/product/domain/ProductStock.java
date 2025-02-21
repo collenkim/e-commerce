@@ -27,8 +27,7 @@ public class ProductStock extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_stock_id")
     private Long productStockId;
-
-
+    
     @Column(name = "product_stock", nullable = false)
     private Integer productStock;
 

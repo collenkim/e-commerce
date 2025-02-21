@@ -12,7 +12,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -36,36 +35,29 @@ public class ProductOption extends BaseEntity {
     @Column(name = "product_option_id")
     private Long productOptionId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     @Column(name = "option_type", nullable = false, length = 10)
     @Enumerated(value = EnumType.STRING)
-    private OptionTypeCd optionTypeCd; // 옵션 타입 (색상, 용량, 사이즈)
+    private OptionTypeCd optionTypeCd; // 옵션 타입 (기본 색상, 용량, 사이즈)
 
-    @Column(name = "option_value", nullable = false, length = 50)
-    private String optionValue; // 옵션 값
+    @Column(name = "option_values", length = 100)
+    private String optionValues; // 옵션 값 (블랙, 화이트, 350ML)
 
     @OneToMany(mappedBy = "productOption")
-    private List<ProductPrice> productPrices = new ArrayList<>(); // 가격 정보
+    private List<ProductOptionDetail> productOptionDetails = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_stock_id", nullable = false)
-    private ProductStock productStock; // 재고
-
-    @Column(name = "daily_purchase_limit")
-    private Integer dailyPurchaseLimit;
-
-    private ProductOption(Product product, OptionTypeCd optionTypeCd, String optionValue) {
+    private ProductOption(Product product, OptionTypeCd optionTypeCd, String optionValues) {
         this.product = product;
         this.optionTypeCd = optionTypeCd;
-        this.optionValue = optionValue;
+        this.optionValues = optionValues;
     }
 
     public static ProductOption createProductOption(Product product, OptionTypeCd optionTypeCd,
-        String optionValue) {
-        return new ProductOption(product, optionTypeCd, optionValue);
+        String optionValues) {
+        return new ProductOption(product, optionTypeCd, optionValues);
     }
 
 }
